@@ -69,7 +69,14 @@ export default function Joke() {
     <div className="flex flex-col items-center justify-center min-h-screen bg-yellow-100 text-yellow-800">
       <div className="max-w-md w-full space-y-6 px-4">
         <div className="text-center space-y-2">
-          <h1 className="text-4xl font-bold">AI Joke Generator</h1>
+          <h1 className="text-4xl font-bold">
+            <a
+              href="https://www.youtube.com/watch?v=3rn2N0ZbLEQ&list=FLPKjhz6DgpHII07qf0KNMGQ&index=265"
+              target="_blank"
+            >
+              AI Joke Generator
+            </a>
+          </h1>
           <p className="text-yellow-600">
             Customize your perfect joke with our AI-powered generator.
           </p>
