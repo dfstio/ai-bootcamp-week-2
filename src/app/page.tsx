@@ -47,13 +47,17 @@ export default function Joke() {
   const [type, setType] = useState<string | undefined>(undefined);
   const [evaluation, setEvaluation] = useState<string | undefined>(undefined);
   const [temperature, setTemperature] = useState<number>(0.5);
+  const [loading, setLoading] = useState<boolean>(false);
 
   async function generateJoke() {
     const jokeDescription = `Generate a joke about a topic: ${
       topic ?? "random"
     }, with a tone: ${tone ?? "random"}, and a type: ${type ?? "random"}.`;
-    const joke = await completion(jokeDescription);
+    console.log({ jokeDescription, temperature });
+    setLoading(true);
+    const joke = await completion(jokeDescription, temperature);
     setJoke(joke);
+    setLoading(false);
   }
 
   async function evaluateJoke() {
@@ -134,6 +138,7 @@ export default function Joke() {
                   max={1}
                   step={0.1}
                   defaultValue={[0.5]}
+                  onValueChange={(value) => setTemperature(value[0])}
                 />
               </div>
             </div>
@@ -144,7 +149,7 @@ export default function Joke() {
               className="w-full bg-yellow-500 text-white hover:bg-yellow-600"
               onClick={generateJoke}
             >
-              Generate Joke
+              {loading ? "Generating Joke..." : "Generate Joke"}
             </Button>
           </CardFooter>
         </Card>

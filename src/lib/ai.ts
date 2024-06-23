@@ -4,7 +4,10 @@ import OpenAI from "openai";
 
 // generate completion with OpenAI
 
-export async function completion(prompt: string): Promise<string> {
+export async function completion(
+  prompt: string,
+  temperature: number
+): Promise<string> {
   const openai = new OpenAI();
   const messages: any[] = [
     {
@@ -18,6 +21,7 @@ export async function completion(prompt: string): Promise<string> {
   const completion = await openai.chat.completions.create({
     model: "gpt-4o",
     messages,
+    temperature: temperature ?? 0.5,
   });
   console.log("ChatGPT full log", completion);
 
