@@ -4,11 +4,13 @@ import OpenAI from "openai";
 
 // generate completion with OpenAI
 
+const baseURL = process.env.AI_BASE_URL;
+
 export async function completion(
   prompt: string,
   temperature: number
 ): Promise<string> {
-  const openai = new OpenAI();
+  const openai = new OpenAI({ baseURL });
   const messages: any[] = [
     {
       role: "system",
@@ -34,7 +36,7 @@ export async function completion(
 }
 
 export async function evaluate(joke: string): Promise<string> {
-  const openai = new OpenAI();
+  const openai = new OpenAI({ baseURL });
   const messages: any[] = [
     {
       role: "system",
