@@ -37,7 +37,7 @@ import {
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { completion } from "@/lib/ai";
+import { completion, evaluate } from "@/lib/ai";
 import { useState } from "react";
 
 export default function Joke() {
@@ -45,6 +45,8 @@ export default function Joke() {
   const [topic, setTopic] = useState<string | undefined>(undefined);
   const [tone, setTone] = useState<string | undefined>(undefined);
   const [type, setType] = useState<string | undefined>(undefined);
+  const [evaluation, setEvaluation] = useState<string | undefined>(undefined);
+  const [temperature, setTemperature] = useState<number>(0.5);
 
   async function generateJoke() {
     const jokeDescription = `Generate a joke about a topic: ${
@@ -52,6 +54,11 @@ export default function Joke() {
     }, with a tone: ${tone ?? "random"}, and a type: ${type ?? "random"}.`;
     const joke = await completion(jokeDescription);
     setJoke(joke);
+  }
+
+  async function evaluateJoke() {
+    const evaluation = await evaluate(joke ?? "");
+    setEvaluation(evaluation);
   }
 
   return (
@@ -156,9 +163,11 @@ export default function Joke() {
               <Button
                 variant="outline"
                 className="mt-4 text-yellow-600 border-yellow-600 hover:bg-yellow-600 hover:text-white"
+                onClick={evaluateJoke}
               >
                 Evaluate
               </Button>
+              <div className="text-lg font-medium">{evaluation || ""}</div>
             </div>
           </div>
         </div>
