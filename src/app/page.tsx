@@ -48,6 +48,7 @@ export default function Joke() {
   const [evaluation, setEvaluation] = useState<string | undefined>(undefined);
   const [temperature, setTemperature] = useState<number>(0.5);
   const [loading, setLoading] = useState<boolean>(false);
+  const [evaluating, setEvaluating] = useState<boolean>(false);
 
   async function generateJoke() {
     const jokeDescription = `Generate a joke about a topic: ${
@@ -57,12 +58,15 @@ export default function Joke() {
     setLoading(true);
     const joke = await completion(jokeDescription, temperature);
     setJoke(joke);
+    setEvaluation(undefined);
     setLoading(false);
   }
 
   async function evaluateJoke() {
+    setEvaluating(true);
     const evaluation = await evaluate(joke ?? "");
     setEvaluation(evaluation);
+    setEvaluating(false);
   }
 
   return (
@@ -160,29 +164,33 @@ export default function Joke() {
             </Button>
           </CardFooter>
         </Card>
-        <div className="bg-yellow-200 p-4 rounded-md shadow-sm">
-          <div className="flex items-center gap-4">
-            <Avatar className="w-10 h-10 border">
-              <AvatarImage src="/placeholder-user.jpg" />
-              <AvatarFallback>AI</AvatarFallback>
-            </Avatar>
-            <div className="flex-1">
-              <div className="font-medium">AI Joke Generator</div>
-              <p className="text-yellow-600">Here is your custom joke:</p>
-              <div className="text-lg font-medium">
-                {joke || "Click the button to generate a joke."}
+        {joke && (
+          <div className="bg-yellow-200 p-4 rounded-md shadow-sm">
+            <div className="flex items-center gap-4">
+              <Avatar className="w-10 h-10 border">
+                <AvatarImage src="/placeholder-user.jpg" />
+                <AvatarFallback>AI</AvatarFallback>
+              </Avatar>
+              <div className="flex-1">
+                <div className="font-medium">AI Joke Generator</div>
+                <p className="text-yellow-600">Here is your custom joke:</p>
+                <div className="text-lg font-medium">
+                  {joke || "Click the button to generate a joke."}
+                </div>
+
+                <Button
+                  variant="outline"
+                  className="w-full bg-yellow-500 text-white hover:bg-yellow-600"
+                  onClick={evaluateJoke}
+                >
+                  {evaluating ? "Evaluating Joke..." : "Evaluate Joke"}
+                </Button>
+
+                <div className="text-lg font-medium">{evaluation || ""}</div>
               </div>
-              <Button
-                variant="outline"
-                className="mt-4 text-yellow-600 border-yellow-600 hover:bg-yellow-600 hover:text-white"
-                onClick={evaluateJoke}
-              >
-                Evaluate
-              </Button>
-              <div className="text-lg font-medium">{evaluation || ""}</div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
